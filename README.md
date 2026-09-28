@@ -2,7 +2,7 @@
 
 A little p5.js workspace: write code on the left, see it on the right.
 
-This started as a teaching tool for an art student learning JavaScript. You can open it, try an idea, and save your sketch without setting up a project first.
+This started as a teaching tool for tutoring an art student to learn JavaScript. You can open it, try an idea, and save your sketch without setting up a project first.
 
 ![Sketchroom](docs/screenshot.png)
 
