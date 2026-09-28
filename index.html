@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sketchroom — p5.js Studio</title>
+    <link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="vendor/codemirror/addon/hint/show-hint.css" />
+    <link rel="stylesheet" href="vendor/codemirror/addon/lint/lint.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="app-shell">
+      <header><h1>Sketchroom</h1></header>
+      <nav aria-label="Studio controls">
+        <button
+          id="sessions-toggle"
+          aria-expanded="false"
+          aria-controls="sessions-menu"
+        >
+          ☰ Sessions <span id="session-count">1</span></button
+        ><span id="current-session">Session 1</span>
+        <button id="run" class="primary">▶ Run</button
+        ><button id="pause">Pause</button>
+        <label class="live"
+          ><input id="live" type="checkbox" checked /> Live preview</label
+        >
+        <span class="spacer"></span>
+        <button id="blank-template" class="blank-button">Blank template</button
+        ><button id="open-local">Open JS</button
+        ><button id="save-local">Save JS</button
+        ><input id="file" type="file" accept=".js" hidden />
+      </nav>
+      <main id="workspace">
+        <section class="editor-panel" id="editor-panel">
+          <div class="panel-title">
+            <h2>Code <span id="diagnostics"></span></h2>
+            <div class="panel-actions">
+              <span id="save">Untitled · Unsaved</span
+              ><button data-fullscreen="editor-panel">Fullscreen</button>
+            </div>
+          </div>
+          <div class="editor" id="editor-host">
+            <textarea id="code" aria-label="JavaScript code editor"></textarea>
+          </div>
+        </section>
+        <div
+          id="divider"
+          role="separator"
+          tabindex="0"
+          aria-label="Resize code and preview"
+          aria-orientation="vertical"
+          aria-valuemin="20"
+          aria-valuemax="80"
+          aria-valuenow="50"
+          title="Drag to resize; double-click to split equally"
+        ></div>
+        <section class="preview-panel" id="preview-panel">
+          <div class="panel-title">
+            <h2>Preview</h2>
+            <div class="panel-actions">
+              <span id="status" role="status">Ready</span
+              ><button data-fullscreen="preview-panel">Fullscreen</button>
+            </div>
+          </div>
+          <div id="stage"></div>
+        </section>
+      </main>
+      <section class="feedback" id="feedback">
+        <div class="feedback-heading">
+          <button
+            id="console-toggle"
+            aria-expanded="true"
+            aria-controls="messages"
+          >
+            <span id="console-chevron" aria-hidden="true">⌄</span
+            ><strong id="message-title">Console</strong
+            ><span id="message-count">0 / 50</span></button
+          ><button id="clear">Clear</button>
+        </div>
+        <pre id="messages" role="log" aria-live="off"></pre>
+      </section>
+    </div>
+    <div id="drop-overlay" hidden>
+      <div>
+        <strong>Drop your .js file</strong><span>One file at a time</span>
+      </div>
+    </div>
+    <div id="sessions-shade" hidden></div>
+    <aside id="sessions-menu" hidden aria-label="Sessions">
+      <div class="sessions-heading">
+        <h2>Sessions</h2>
+        <button id="sessions-close" aria-label="Close sessions">✕</button>
+      </div>
+      <button id="session-new" class="primary">+ New session</button>
+      <label class="session-search"
+        ><span class="sr-only">Search sessions</span
+        ><input
+          id="session-search"
+          type="search"
+          placeholder="Search sessions or files"
+          autocomplete="off"
+      /></label>
+      <div class="list-heading">
+        Sessions <span id="session-list-count"></span>
+      </div>
+      <div id="session-list"></div>
+      <p id="session-storage" role="status"></p>
+    </aside>
+    <div
+      id="session-actions-popover"
+      popover="auto"
+      aria-label="Session actions"
+    ></div>
+    <dialog
+      id="session-dialog"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-message"
+    >
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-message"></p>
+      <div class="dialog-actions">
+        <button id="dialog-no">No</button
+        ><button id="dialog-yes" class="primary">Yes</button>
+      </div>
+    </dialog>
+    <script src="vendor/codemirror/lib/codemirror.js"></script>
+    <script src="vendor/codemirror/mode/javascript/javascript.js"></script>
+    <script src="vendor/codemirror/addon/edit/closebrackets.js"></script>
+    <script src="vendor/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="vendor/codemirror/addon/comment/comment.js"></script>
+    <script src="vendor/codemirror/addon/selection/active-line.js"></script>
+    <script src="vendor/codemirror/addon/hint/show-hint.js"></script>
+    <script src="vendor/codemirror/addon/hint/javascript-hint.js"></script>
+    <script src="vendor/jshint/jshint.js"></script>
+    <script src="vendor/codemirror/addon/lint/lint.js"></script>
+    <script src="vendor/p5-globals.js"></script>
+    <script src="editor.js"></script>
+    <script src="app.js"></script>
+    <script src="files.js"></script>
+    <script src="sessions.js"></script>
+  </body>
+</html>

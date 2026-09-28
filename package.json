@@ -1,0 +1,17 @@
+{
+  "name": "sketchroom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An offline-friendly p5.js studio with live preview and persistent sessions.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/studio.test.cjs",
+    "check": "node --check app.js && node --check editor.js && node --check files.js && node --check sessions.js",
+    "format": "prettier --write '*.js' '*.html' style.css tests README.md THIRD_PARTY_NOTICES.md",
+    "format:check": "prettier --check '*.js' '*.html' style.css tests README.md THIRD_PARTY_NOTICES.md"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "prettier": "3.6.2"
+  }
+}

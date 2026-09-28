@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #e7edf1;
+      }
+      body {
+        display: grid;
+        place-items: center;
+        min-width: fit-content;
+        min-height: 100vh;
+      }
+      main {
+        display: flex;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+    <script>
+      let started = false;
+      const send = (type, text) =>
+        parent.postMessage({ studio: true, type, text }, "*");
+      window.addEventListener("error", (e) =>
+        send(
+          "error",
+          e.message +
+            (e.filename?.includes("sketch.js")
+              ? " (line " + e.lineno + ")"
+              : ""),
+        ),
+      );
+      window.addEventListener("unhandledrejection", (e) =>
+        send("error", String(e.reason)),
+      );
+      for (const level of ["log", "warn", "error"]) {
+        const original = console[level];
+        console[level] = (...args) => {
+          original.apply(console, args);
+          send(
+            level,
+            args
+              .map((x) => {
+                try {
+                  return typeof x === "string" ? x : JSON.stringify(x);
+                } catch {
+                  return String(x);
+                }
+              })
+              .join(" "),
+          );
+        };
+      }
+      window.addEventListener("message", (e) => {
+        if (e.source !== parent || !e.data?.studio) return;
+        if (e.data.type === "code" && !started) {
+          started = true;
+          try {
+            const s = document.createElement("script");
+            s.textContent = e.data.code + "\n//# sourceURL=sketch.js";
+            document.body.appendChild(s);
+            if (typeof setup !== "function" && typeof draw !== "function") {
+              send("error", "Define function setup() or function draw().");
+              return;
+            }
+            new p5();
+            send("running", "");
+          } catch (err) {
+            send("error", String(err));
+          }
+        }
+        if (e.data.type === "pause") {
+          if (typeof noLoop === "function") noLoop();
+          send("paused", "");
+        }
+        if (e.data.type === "resume") {
+          if (typeof loop === "function") loop();
+          send("running", "");
+        }
+      });
+    </script>
+    <script src="vendor/p5.min.js"></script>
+  </head>
+  <body></body>
+</html>
